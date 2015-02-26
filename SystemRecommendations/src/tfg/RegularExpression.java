@@ -13,7 +13,7 @@ public class RegularExpression {
 		string += "|"+HotelFeature.POSICION.getPositiveRegularExpression();
 		string += "|"+HotelFeature.TARIFA.getPositiveRegularExpression();
 		string += "|"+HotelFeature.SUGERENCIAS.getPositiveRegularExpression();
-		System.out.println(string);
+		//System.out.println(string);
 		return string;
 	}
 	
