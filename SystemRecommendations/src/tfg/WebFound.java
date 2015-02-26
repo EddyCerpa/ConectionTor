@@ -52,7 +52,7 @@ public class WebFound {
 		for (int i = 0; i < arrayListUrl.size() && i < numberUrl; i++) {
 			StringBuilder html = getHtml(arrayListUrl.get(i).getUrl());
 			URLAnalysis url_ = arrayListUrl.get(i);
-			
+			System.out.println("scanning web " + (i+1));
 			scanPositiveRegularExpression(html, url_);
 			scanNegativeRegularExpression(html, url_);
 			scanPositiveWord(html, url_);
