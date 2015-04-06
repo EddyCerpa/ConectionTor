@@ -4,8 +4,14 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+
 import org.json.JSONException;
 
+//@Path("/Menu")
 public class Menu {
 
 	public void run() {
@@ -24,9 +30,11 @@ public class Menu {
 			System.out.println("3-Search termins webs results");
 			System.out.println("4-Exit");
 			try {
-				int num = sc.nextInt();
+				//int num = sc.nextInt();
+				int num = 1;//*****
 				if (num == 1){
-					nearlyHotel(sc);
+					//nearlyHotel(sc);
+					return;
 				}
 				else if (num == 2){
 					statisticalResults(sc);
@@ -110,17 +118,14 @@ public class Menu {
 			e.printStackTrace();
 		}
 	}
-
-	private void nearlyHotel(Scanner sc) {
-		// 40.420138, -3.704801, 500
-
-		System.out.println("Enter latitude:");
-		double latitude = sc.nextDouble();
-		System.out.println("Enter longitude:");
-		double longitude = sc.nextDouble();
-		System.out.println("Enter radius: ");
-		int radius = sc.nextInt();
-		PositionOfSearch position = new PositionOfSearch(latitude, longitude,radius);
+	/*
+	@GET
+	@Produces("application/json")
+	//@Produces("text/plain")
+	public String nearlyHotel(@QueryParam("radio") int radius, 
+								@QueryParam("lat") double latitude,
+								@QueryParam("lon") double longitude){
+		PositionOfSearch position = new PositionOfSearch(latitude, longitude,radius);//40.42 -3.72
 		NearlyHotel nH = new NearlyHotel(position);
 
 		try {
@@ -130,15 +135,43 @@ public class Menu {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	
-
+		return nH.getGson();
+		
 	}
+	*/
 	
+	
+	
+	//---------------------------
 	public static void main(String[] args) {
 		Menu menu = new Menu();
 		menu.run();
 	}
 
-	
-
 }
+
+/*
+@Path("/Menu")
+class SearchHotel {
+		
+	@GET
+	@Produces("application/json")
+	//@Produces("text/plain")
+	public String nearlyHotel(@QueryParam("radio") int radius, 
+								@QueryParam("lat") double latitude,
+								@QueryParam("lon") double longitude){
+		PositionOfSearch position = new PositionOfSearch(latitude, longitude,radius);//40.42 -3.72
+		NearlyHotel nH = new NearlyHotel(position);
+
+		try {
+			nH.SearchHotel();
+			System.out.println(nH.toString());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nH.getGson();
+		
+	}
+}*/
+

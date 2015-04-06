@@ -7,9 +7,9 @@ public enum HotelFeature {
 	TARIFA ("[C|c]oste|[T|t]arifa ", "(tarifa plana mini bar|"
 			+ "barato|"
 			+ "sencillo|"
-			+ "magnifico presio|"
-			+ "buena relacion calidad presio|"
-			+ "ofertas y promociones) ", null),
+			+ "magnifico precio|"
+			+ "buena relacion calidad precio|"
+			+ "ofertas y promociones) ", "sin ofertas|muy caro"), //null
 	
 	SUGERENCIAS ("([R|r]ecomendacion|[S|s]ugerencias|barato|economico) ",
 			"(mascotas permitidas|"
@@ -56,7 +56,7 @@ public enum HotelFeature {
 					+ "no cumple el número de estrellas|"
 					+ "calidad y servicio no es de N estrellas|"
 					+ "spa y ubicación pésimos|"
-					+ "spa peque�o|"
+					+ "spa pequeño|"
 					+ "desayuno muy caro|"
 					+ "jacuzzi averiado) "),
 	

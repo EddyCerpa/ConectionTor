@@ -1,5 +1,6 @@
 package tfg;
 
+import java.io.IOException;
 import java.net.MalformedURLException;
 
 import org.json.JSONException;
@@ -59,11 +60,30 @@ public class EstimationHotel {
 		
 		
 	}*/
+
+	public static void main(String arg[]){
+		try {
+			System.out.println("hola");
+			/*System.out.println("ab,c,d".split("|")[2]);
+			String a = "(rojo claro|amarillo|verde azul|morado|marrón)";
+			String colores = a.substring(1, a.length()-1);
+			String[] arrayColores = colores.split("\\|");
+			 
+			// En este momento tenemos un array en el que cada elemento es un color.
+			for (int i = 0; i < arrayColores.length; i++) {
+				System.out.println(arrayColores[i]);
+			}*/
+			System.out.println(getScore("Madrid", "Palace", "Precio"));
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * P(A) = Hotel + city+nameHotel
 	 * P(B) = Hotel + city + term
-	 * conditional probability = (P(A) && P(B))/P(B)
+	 * conditional probability =(P(A) && P(B))/P(B)
 	 * @param city city where the hotel
 	 * @param nameHotel Hotel Name
 	 * @param termsearch criterion
@@ -73,6 +93,7 @@ public class EstimationHotel {
 	 */
 	public static double getBayes(String city, String nameHotel, String term) throws MalformedURLException, Exception{
 		JSONObject json = TestGetJSON.getJSON(TestGetJSON.generateGoogleApiSearch("hotel "+city + " " + nameHotel +" "+ term,0));
+		
 		double pAandpB = getNumberResults(json); // numerador
 		System.out.println("ayb " + pAandpB);
 		
@@ -80,9 +101,90 @@ public class EstimationHotel {
 		double pB = getNumberResults(json); // numerador
 		System.out.println("b "+pB);
 		return pAandpB / pB;
+		//return pAandpB;
 	}
 	
 	
+	public static double getScore(String city, String nameHotel, String term) throws Exception{
+		//termin = a,b,c
+				String[] terms = term.split(",");
+				double precio = 0;
+				double limpieza = 0;
+				for (String simple : terms) {
+					switch (simple) {
+					case "Precio":
+						precio = getScorePrice(city,nameHotel);
+						break;
+					case "Limpieza":
+						limpieza = getScoreCleanness(city,nameHotel);
+						break;
+					default:
+						break;
+					}
+				}
+			return 0;	
+	}
+	
+	private static double getScoreCleanness(String city, String nameHotel) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+	private static double getScorePrice(String city, String nameHotel) throws Exception {
+		// TODO Auto-generated method stub
+		double positive = 0;
+		double negative = 0;
+		
+		
+		
+		String cad = HotelFeature.TARIFA.getPositiveRegularExpression();
+		String cad2 = cad.substring(1, cad.length()-1);
+		String pricePositive [] = cad2.split("\\|");
+		positive = getValues(city, nameHotel, pricePositive);
+				
+		String priceNegative [] = HotelFeature.TARIFA.getNegativeREgularExpression().split("\\|");;
+		negative = getValues(city, nameHotel, priceNegative);
+		
+		
+		if (positive > negative){
+			double pResult = 0;
+			if (positive < 0)
+				pResult = positive * 5;
+			else 
+				System.out.println("Posive price > 1");
+			return pResult;
+		}
+	
+		else{
+			double nResult = 0;
+			if (negative < 0)
+				nResult = negative * 5;
+			else 
+				System.out.println("Posive negative > 1");
+			return nResult;
+			
+		}
+			
+	}
+	
+	
+
+
+
+	
+	
+	private static double getValues(String city, String nameHotel,
+			String[] pricePositive) throws MalformedURLException, Exception {
+		double result=0;
+	
+		for (int i = 0; i < 2; i++) {
+			result += getBayes( city, nameHotel, pricePositive[i]);
+		}
+		return result;
+	}
+
+
 	// round two decimal
 	/*private double roundTwoDecimals(double d) { 
 	      DecimalFormat twoDForm = new DecimalFormat("#.##"); 

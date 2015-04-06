@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+
 
 /*
  * https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=-33.8670522,151.1957362&radius=500&types=food&name=harbour&sensor=false&key=AIzaSyBhmi0Tza5mePpDCBv4F4_OJywxEhD67Ic
@@ -43,19 +46,19 @@ public class NearlyHotel {
 		JSONObject json = TestGetJSON.getJSON(url);
 			
 			JSONArray jsonArray = new JSONArray(json.getString("results"));
-			System.out.println("\n\njsonArray: " + jsonArray);
+			//System.out.println("\n\njsonArray: " + jsonArray);
 			int count = jsonArray.length(); 
 			for(int i=0 ; i< count ; i++){   // iterate through jsonArray 
 				JSONObject jsonObject = jsonArray.getJSONObject(i);  // get jsonObject @ i position 
-				System.out.println("jsonObject " + i + ": " + jsonObject);
+			//	System.out.println("jsonObject " + i + ": " + jsonObject);
 				
 				String name = jsonArray.getJSONObject(i).getString("name");
-				//String vicinity = jsonArray.getJSONObject(i).getString("vicinity");
+				String vicinity = jsonArray.getJSONObject(i).getString("vicinity");
 				String lat = TestGetJSON.getJSONObjet(TestGetJSON.getJSONObjet(jsonArray.getJSONObject(i).getString("geometry"), "location"), "lat");
 				String lng = TestGetJSON.getJSONObjet(TestGetJSON.getJSONObjet(jsonArray.getJSONObject(i).getString("geometry"), "location"), "lng");
-				Hotel hotel = new Hotel(Double.parseDouble(lat), Double.parseDouble(lng), name );
+				
+				Hotel hotel = new Hotel(Double.parseDouble(lat), Double.parseDouble(lng), name , vicinity);
 				hotels.add(hotel);
-				//System.out.println("-----");
 			
 			}
 	}
@@ -74,16 +77,24 @@ public class NearlyHotel {
 				System.out.println("jsonObject " + i + ": " + jsonObject);
 				
 				String name = jsonArray.getJSONObject(i).getString("name");
-				//String vicinity = jsonArray.getJSONObject(i).getString("vicinity");
+				String vicinity = jsonArray.getJSONObject(i).getString("vicinity");
 				String lat = TestGetJSON.getJSONObjet(TestGetJSON.getJSONObjet(jsonArray.getJSONObject(i).getString("geometry"), "location"), "lat");
 				String lng = TestGetJSON.getJSONObjet(TestGetJSON.getJSONObjet(jsonArray.getJSONObject(i).getString("geometry"), "location"), "lng");
-				Hotel hotel = new Hotel(Double.parseDouble(lat), Double.parseDouble(lng), name );
+				Hotel hotel = new Hotel(Double.parseDouble(lat), Double.parseDouble(lng), name, vicinity );
 				hotels.add(hotel);
-				//System.out.println("-----");
-			
 			}
 	}
 	
+	public String getGson(){
+		/*Gson gson = new Gson();
+		return gson.toJson(hotels);*/
+		
+		JsonArray jsonArray = new JsonArray();
+		for (Hotel hotel : hotels) {
+			jsonArray.add(hotel.getJson());
+		}
+		return new GsonBuilder().setPrettyPrinting().create().toJson(jsonArray); 
+	}
 	
 	
 	
